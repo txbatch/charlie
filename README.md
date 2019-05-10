@@ -11,4 +11,4 @@
 So
 
 ## Solution: Charlie
-- An open-source Chrome extension that de-trash-ifies block explorers, by removing clunky 'features' and adding genuine missing features.
+- An open-source Chrome extension that upgrades block explorers, by removing unnecessary 'features' and adding genuine missing features.

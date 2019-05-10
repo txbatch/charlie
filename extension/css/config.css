@@ -1,0 +1,29 @@
+.title {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+body, h1, h3, button, .btn {
+    font-family: "Helvetica Neue", sans-serif;
+    word-spacing: 2px;
+    margin-bottom: 20px;
+}
+
+p {
+    font-size: 16px;
+    margin-bottom: 20px;
+}
+
+#options {
+    margin-top: 70px
+}
+
+div#save-btn {
+    font-size: 16px;
+    margin-top: 20px;
+    background-color: lightblue;
+    border-radius: 3px;
+    padding: 5px 10px;
+    display: inline-block;
+}

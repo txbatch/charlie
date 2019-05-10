@@ -1,0 +1,27 @@
+{
+  "manifest_version": 2,
+  "name": "Charlie by TxBatch.com",
+  "description": "Block explorer upgrader. Open source: https://github.com/txbatch/charlie",
+  "version": "1",
+  "options_page": "html/config.html",
+  "browser_action": {
+    "default_icon": {
+      "19": "images/enabled.png"
+    },
+    "default_title": "Click to disable Charlie"
+  },
+  "background": {
+    "scripts": [
+      "js/background.js"
+    ],
+    "persistent": false
+  },
+  "permissions": [
+    "storage",
+    "tabs",
+    "<all_urls>"
+  ],
+  "icons": {
+    "128": "images/icon128.png"
+  }
+}
