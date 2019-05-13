@@ -69,44 +69,48 @@ function fixDataCorruption() {
 function toggleActive() {
   if (debug) { console.log("toggleActive fired"); }
   chrome.storage.sync.get("status", function(result) {
+    var status;
+    // Default = enable
+    if (result.status === null) {
+      status = "enabled";
+    } else {
+      status = result.status;
+    }
+    if (status === "enabled") {
+      icon = {
+        "path": "images/disabled.png"
+      };
+      message = {
+        "title": "Click to enable Charlie"
+      };
+      status = "disabled";
+    } else if (status === "disabled") {
+      icon = {
+        "path": "images/enabled.png"
+      };
+      message = {
+        "title": "Click to disable Charlie"
+      };
+      status = "enabled";
+    }
+    chrome.browserAction.setIcon(icon);
+    chrome.browserAction.setTitle(message);
+    chrome.storage.sync.set({
+      "status": status
+    });
     // Get active tab
     chrome.tabs.query({
       active: true,
       lastFocusedWindow: true
     }, function(tabs) {
       var tab = tabs[0];
-        // Default = enable
-        if (result.status === null) {
-          status = "enabled";
-        } else {
-          status = result.status;
-        }
-        if (status === "enabled") {
-          icon = {
-            "path": "images/disabled.png"
-          };
-          message = {
-            "title": "Click to enable Charlie"
-          };
-          status = "disabled";
-          // Reload page (only way to remove script effects afaik)
-          chrome.tabs.update(tab.id, {url: tab.url});
-        } else if (status === "disabled") {
-          icon = {
-            "path": "images/enabled.png"
-          };
-          message = {
-            "title": "Click to disable Charlie"
-          };
-          status = "enabled";
-          // Inject script (no reload needed)
-          injectScript(tab.id, tab);
-        }
-        chrome.browserAction.setIcon(icon);
-        chrome.browserAction.setTitle(message);
-        chrome.storage.sync.set({
-          "status": status
-        });
+      if (status === "enabled") {
+        // Inject script (no reload needed)
+        injectScript(tab.id, tab);
+      } else if (status === "disabled") {
+        // Reload page (only way to remove script effects afaik)
+        chrome.tabs.update(tab.id, {url: tab.url});
+      }
     });
   });
 }
