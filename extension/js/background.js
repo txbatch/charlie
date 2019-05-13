@@ -3,7 +3,7 @@ var default_settings = {
   "no_commas": true
 }
 
-// Default Bbacklist
+// Default blacklist
 var default_blacklisted_sites = [
   "docs.google.com",
   "gmail.com",
@@ -12,7 +12,7 @@ var default_blacklisted_sites = [
   "zendesk.com"
 ];
 
-var debug = true;
+var debug = false;
 
 function checkBlacklist(url, blacklist) {
   url = url.toLowerCase() || "";
@@ -25,10 +25,10 @@ function checkBlacklist(url, blacklist) {
   return true;
 }
 
-function injectScript(tabId, info, tab) {
+function injectScript(tabId, tab) {
   if (debug) {console.log("injectScript fired");}
   chrome.storage.sync.get(null, function (result) {
-    if (result && result.status === "enabled" && checkBlacklist(tab.url, result.blacklist)) {
+    if (result && result.status === "enabled" && checkBlacklist(tab.url, result.blacklist) && tab.url.indexOf("chrome-") === -1 && tab.url.indexOf("chrome://") === -1) {
       chrome.tabs.executeScript(tabId, {
         file: "js/jquery.min.js",
         runAt: "document_start"
@@ -69,46 +69,58 @@ function fixDataCorruption() {
 function toggleActive() {
   if (debug) { console.log("toggleActive fired"); }
   chrome.storage.sync.get("status", function(result) {
-    if (result.status === null) {
-      status = "enabled";
-    } else {
-      status = result.status;
-    }
-    if (status === "enabled") {
-      icon = {
-        "path": "images/disabled.png"
-      };
-      message = {
-        "title": "Click to enable Charlie"
-      };
-      status = "disabled";
-    } else if (status === "disabled") {
-      icon = {
-        "path": "images/enabled.png"
-      };
-      message = {
-        "title": "Click to disable Charlie"
-      };
-      status = "enabled";
-    }
-    chrome.browserAction.setIcon(icon);
-    chrome.browserAction.setTitle(message);
-    chrome.storage.sync.set({
-      "status": status
+    // Get active tab
+    chrome.tabs.query({
+      active: true,
+      lastFocusedWindow: true
+    }, function(tabs) {
+      var tab = tabs[0];
+        // Default = enable
+        if (result.status === null) {
+          status = "enabled";
+        } else {
+          status = result.status;
+        }
+        if (status === "enabled") {
+          icon = {
+            "path": "images/disabled.png"
+          };
+          message = {
+            "title": "Click to enable Charlie"
+          };
+          status = "disabled";
+          // Reload page (only way to remove script effects afaik)
+          chrome.tabs.update(tab.id, {url: tab.url});
+        } else if (status === "disabled") {
+          icon = {
+            "path": "images/enabled.png"
+          };
+          message = {
+            "title": "Click to disable Charlie"
+          };
+          status = "enabled";
+          // Inject script (no reload needed)
+          injectScript(tab.id, tab);
+        }
+        chrome.browserAction.setIcon(icon);
+        chrome.browserAction.setTitle(message);
+        chrome.storage.sync.set({
+          "status": status
+        });
     });
   });
 }
 
-// listen for enable/disable
+// Listen for enable/disable
 chrome.browserAction.onClicked.addListener(toggleActive);
 
-// check for page tab loads
+// Check for page tab loads
 chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
     if (changeInfo.status == 'complete' && tab.status == 'complete' && tab.url != undefined) {
-        injectScript(tabId, changeInfo, tab);
+        injectScript(tabId, tab);
     }
 });
 
-// fix data corruption @ startup
+// Fix data corruption @ startup
 chrome.runtime.onInstalled.addListener(fixDataCorruption);
 chrome.runtime.onStartup.addListener(fixDataCorruption);
