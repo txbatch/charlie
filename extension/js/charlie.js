@@ -26,6 +26,16 @@ function substitute(node) {
       if (node.nodeValue === "") {
         node.parentNode.remove();
       }
+    // Add extra satoshi zeroes for easy Ctrl-F
+    } else if (node.nodeValue.match(/\.[0-9]+/)) {
+      var decimals = node.nodeValue.split('.')[1];
+      if (decimals) {
+        decimals = decimals.replace(/\D/g, "");
+        if (decimals.length < 8) {
+          var sats = decimals + Math.pow(10, 8-decimals.length).toString().split("1")[1];
+          node.nodeValue = node.nodeValue.replace("."+decimals, "."+sats);
+        }
+      }
     }
     // (Loose) attempt to de-link addresses & txids
     if (node.parentNode.tagName === "A" && !($(node.parentNode).hasClass("charlie-link")) && ! (!node.nodeValue.match(/([0-9]|[A-Z]){30}/i))) {
