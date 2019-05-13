@@ -42,9 +42,14 @@ function substitute(node) {
       var el = node.parentNode;
       var txt = node.nodeValue;
       node.nodeValue = "[View " + (txt.length <= 60 ? "Address" : "Transaction") + "]"; // This can appear left or right depending on the explorer
-      $(el).css('padding-right', '5px');
+      $(el).css({
+        'padding-right': '5px',
+        'word-break': 'break-word',
+        'white-space': 'nowrap',
+        'display': 'inline-block'
+      });
       // We use an <a> link so styling is preserved...
-      $(el).before('<a style="padding-right: 5px; text-decoration: none; color: green" class="charlie-link">' + txt +'</a>');
+      $(el).before('<a style="padding-right: 5px; text-decoration: none;" class="charlie-link">' + txt +'</a>');
 
       /* Copy text on click
       $(el.parentNode).on('click', 'a.charlie-link', function(event) {

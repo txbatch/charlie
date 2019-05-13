@@ -15,3 +15,35 @@ So...
 ## Solution: Charlie
 
 - An open-source Chrome extension that upgrades block explorers, by removing unnecessary 'features' and adding genuine missing features.
+
+## Benefits
+
+### Remove commas automatically when searching numbers
+
+Before:
+![](https://i.imgur.com/JlXD154.png)
+
+After:
+![](https://i.imgur.com/VXDcxJM.png)
+
+### Stop accidentally clicking on address/transaction links
+
+Before:
+![](https://i.imgur.com/SPPhu62.png)
+
+After:
+![](https://i.imgur.com/oN51w87.png)
+
+Example with Etherscan:
+![](https://i.imgur.com/HA6Tx3C.png)
+
+After:
+![](https://i.imgur.com/TRclUuP.png)
+
+### Get matches for trailing zeroes (sats) when you search amounts
+
+Before:
+![](https://i.imgur.com/HooVByr.png)
+
+After:
+![](https://i.imgur.com/ZacK10v.png)

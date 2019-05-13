@@ -9,7 +9,8 @@ var default_blacklisted_sites = [
   "gmail.com",
   "mail.google.com",
   "outlook.com",
-  "zendesk.com"
+  "zendesk.com",
+  "etherscan.io/address/"
 ];
 
 var debug = false;
