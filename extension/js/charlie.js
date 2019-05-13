@@ -16,7 +16,7 @@ function substitute(node) {
     elms += 1;
     // Strip commas from numbers
     if (node.nodeValue.match(/([0-9],[0-9])/g)) {
-      node.nodeValue = node.nodeValue.replace(",", "");
+      node.nodeValue = node.nodeValue.replace(/,/g, "");
     }
   }
 }
