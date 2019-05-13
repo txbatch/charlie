@@ -15,14 +15,23 @@ function substitute(node) {
   if (ignore.indexOf(node.parentNode.tagName) === -1) {
     elms += 1;
     // Strip commas from numbers, and add zeroes where appropriate
-    if (node.nodeValue.match(/([0-9],[0-9])/g)) {
+    if (node.nodeValue.match(/([0-9],[0-9])/)) {
       node.nodeValue = node.nodeValue.replace(/,/g, "");
+    }
+    // Hide dollar amounts
+    if (node.nodeValue.match(/\$[0-9]+.[0-9]+/)) {
+      // Usually these are inside brackets or added alongside numbers
+      node.nodeValue = node.nodeValue.replace(/\$[0-9]+.[0-9]+/, "").replace(/\(\)|\[\]|\/|at|\@/g, "").trim();
+      // If it's a self-encapsulated element, then remove it
+      if (node.nodeValue === "") {
+        node.parentNode.remove();
+      }
     }
     // (Loose) attempt to de-link addresses & txids
     if (node.parentNode.tagName === "A" && !($(node.parentNode).hasClass("charlie-link")) && ! (!node.nodeValue.match(/([0-9]|[A-Z]){30}/i))) {
       var el = node.parentNode;
       var txt = node.nodeValue;
-      node.nodeValue = "(View " + (txt.length <= 35 ? "Address" : "Transaction") + ")"; // This can appear left or right depending on the explorer
+      node.nodeValue = "[View " + (txt.length <= 60 ? "Address" : "Transaction") + "]"; // This can appear left or right depending on the explorer
       $(el).css('padding-right', '5px');
       // We use an <a> link so styling is preserved...
       $(el).before('<a style="padding-right: 5px; text-decoration: none; color: green" class="charlie-link">' + txt +'</a>');
