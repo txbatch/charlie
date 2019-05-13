@@ -1,4 +1,6 @@
-## Problem: Block explorers aren't made for answering customer support tickets.
+# Charlie: The block explorer upgrader
+
+## Problem: Block explorers aren't made for answering customer support tickets
 
 - In order to do basic stuff like search amounts, you have to add commas and remove trailing zeroes from your CTRL-F query.
 
@@ -8,7 +10,8 @@
 
 - There's no batch searching (we solved this with https://app.txbatch.com, by the way) or searching via amount/address/memo.
 
-So
+So...
 
 ## Solution: Charlie
+
 - An open-source Chrome extension that upgrades block explorers, by removing unnecessary 'features' and adding genuine missing features.
