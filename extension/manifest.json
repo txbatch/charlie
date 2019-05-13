@@ -2,7 +2,7 @@
   "manifest_version": 2,
   "name": "Charlie by TxBatch.com",
   "description": "Block explorer upgrader. Open source: https://github.com/txbatch/charlie",
-  "version": "1",
+  "version": "1.1",
   "options_page": "html/config.html",
   "browser_action": {
     "default_icon": {
